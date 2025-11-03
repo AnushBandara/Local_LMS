@@ -160,3 +160,85 @@ def add_new_user(username, password, status, grade):
         return False
     finally:
         conn.close()
+
+
+def get_all_classes():
+    """Return list of all classes as (class_name, grade)."""
+    conn = sqlite3.connect("lms.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT class_name, grade FROM classes ORDER BY grade ASC")
+    classes = cursor.fetchall()
+    conn.close()
+    return classes
+
+
+def delete_class(class_name):
+    """Delete a class from the database."""
+    conn = sqlite3.connect("lms.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM classes WHERE class_name=?", (class_name,))
+    conn.commit()
+    conn.close()
+
+def add_new_class(class_name, grade):
+    """Insert a new class. Returns True if successful, False if class already exists."""
+    conn = sqlite3.connect("lms.db")
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO classes (class_name, grade) VALUES (?, ?)", (class_name, grade))
+        conn.commit()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+    finally:
+        conn.close()
+
+def get_all_topics():
+    """Return all topics with their associated class names (no duplicates removed)."""
+    conn = sqlite3.connect("lms.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT topic_name, class_name
+        FROM topics
+        ORDER BY class_name ASC, topic_name ASC
+    """)
+    topics = cursor.fetchall()
+    conn.close()
+    return topics
+
+
+
+def get_all_class_names():
+    """Return list of all existing class names."""
+    conn = sqlite3.connect("lms.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT class_name FROM classes ORDER BY class_name ASC")
+    classes = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return classes
+
+
+def add_new_topic(topic_name, class_name, video_path, description):
+    """Insert a new topic for a given class with video path and description."""
+    conn = sqlite3.connect("lms.db")
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO topics (topic_name, class_name, video_path, description) VALUES (?, ?, ?, ?)",
+            (topic_name, class_name, video_path, description)
+        )
+        conn.commit()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+    finally:
+        conn.close()
+
+
+def delete_topic(topic_name, class_name):
+    """Delete a specific topic belonging to a class."""
+    conn = sqlite3.connect("lms.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM topics WHERE topic_name=? AND class_name=?", (topic_name, class_name))
+    conn.commit()
+    conn.close()

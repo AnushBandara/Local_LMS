@@ -4,6 +4,8 @@ from tkinter import ttk
 from utils import styles
 from ui.edit_users import open_edit_users
 from ui.login_page import open_login_page
+from ui.edit_classes import open_edit_classes
+from ui.edit_topics import open_edit_topics
 
 
 def open_admin_dashboard(root, username, open_login_page_func):
@@ -93,9 +95,9 @@ def open_admin_dashboard(root, username, open_login_page_func):
         ).pack(pady=(0, 15))
 
     # Cards
-    create_card(scroll_frame, "👥 Edit Users", lambda: open_edit_users(root, username, open_admin_dashboard))
-    create_card(scroll_frame, "📚 Edit Classes", lambda: open_placeholder_page(root, username, open_admin_dashboard, "Edit Classes"))
-    create_card(scroll_frame, "🎬 Edit Topics", lambda: open_placeholder_page(root, username, open_admin_dashboard, "Edit Topics"))
+    create_card(scroll_frame, "Edit Users", lambda: open_edit_users(root, username, open_admin_dashboard))
+    create_card(scroll_frame, "Edit Classes", lambda: open_edit_classes(root, username, open_admin_dashboard))
+    create_card(scroll_frame, "Edit Topics", lambda: open_edit_topics(root, username, open_admin_dashboard))
 
     # Enable mouse scroll
     def _on_mousewheel(event):
