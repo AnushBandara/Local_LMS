@@ -4,6 +4,7 @@ from db.database import init_db
 from ui.login_page import open_login_page
 from ui.student_dashboard import open_student_dashboard
 from ui.class_page import open_class_page
+from ui.admin_dashboard import open_admin_dashboard  # ✅ added
 from utils import styles
 
 
@@ -14,14 +15,15 @@ def next_page(root, username, status, grade):
             root,
             username,
             grade,
-            # Pass navigation function correctly
             lambda r, u, g, c: open_class_page(r, u, g, c, open_student_dashboard)
         )
-    # Admin placeholder
+    # Admin flow
+    elif status == "admin":
+        open_admin_dashboard(root, username, open_login_page)
     else:
         frame = tk.Frame(root, bg=styles.BG_COLOR)
         frame.pack(fill="both", expand=True)
-        tk.Label(frame, text="Admin Dashboard Coming Soon",
+        tk.Label(frame, text="Invalid user role.",
                  font=styles.FONT_TITLE, fg=styles.FG_COLOR, bg=styles.BG_COLOR).pack(expand=True)
 
 

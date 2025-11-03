@@ -88,7 +88,7 @@ def open_login_page(root, open_next_page):
 
         if result:
             status, grade = result
-            messagebox.showinfo("Success", f"Welcome {username}! You are logged in as {status}.")
+            # messagebox.showinfo("Success", f"Welcome {username}! You are logged in as {status}.")
             outer_frame.destroy()
             open_next_page(root, username, status, grade)
         else:
